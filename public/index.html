@@ -12,9 +12,24 @@
     
     <H1 style="text-align:center">Chuck Norris Challenge</H1>
 
+    <div id="userName"></div>
+
+    <br>
+
     <div id="jokeLists"></div>
 
     <script>
+
+        getUserInfo();
+
+        async function getUserInfo(){
+            const userInfo = await fetch('/api/getUserInfo');
+            const data = await userInfo.json();
+
+            const helloTitle = document.createElement('h1');
+            helloTitle.textContent = "Hello, " + data.userName;
+            document.getElementById('userName').append(helloTitle);
+        }
 
         displayJokes(); 
 
