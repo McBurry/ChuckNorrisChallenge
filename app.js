@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
+const path = require('path');
 
 require('./config/passport')(passport);
 
@@ -19,8 +20,9 @@ application.set('view engine', 'ejs');
 //Parsing of the body
 //application.use(express.urlencoded({ extended: false }));
 application.use(bodyParser.urlencoded({ extended: true }));
-
 application.use(bodyParser.json());
+
+application.use(express.static(path.join(__dirname, 'public')));
 
 //Managing of the sessions
 application.use(session({

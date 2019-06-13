@@ -9,3 +9,33 @@
 <% if(error != ''){ %>
         <%= error%>
 <% } %>
+
+<% if(typeof favoriteJokes != 'undefined'){ %>
+
+        <div class="list-group">
+        <% for(var i = 0; i < favoriteJokes.length; i++){ %>
+                <div class="container-fluid">
+                        <div class="row favorite">
+                                <div class="col-10"><a href="#" class="joke list-group-item list-group-item-secondary"><%=favoriteJokes[i].favoriteJoke%></a></div>
+                                <div class="col-2"><button data-id="<%=favoriteJokes[i].id%>" type="button" class="btn btn-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>
+                        </div>
+                </div>
+                
+        <% } %>
+        </div>
+<% } %>
+
+<% if(typeof jokes != 'undefined'){ %>
+
+        <div class="list-group">
+        <% for(var i = 0; i < jokes.length; i++){ %>
+                <div class="container-fluid">
+                        <div class="row favorite">
+                                <div class="col-10"><a href="#" class="joke list-group-item list-group-item-action"><%=jokes[i].joke%></a></div>
+                                <div class="col-2"><button data-id="<%=jokes[i].id%>" type="button" class="btn btn-outline-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>
+                        </div>
+                </div>
+                
+        <% } %>
+        </div>
+<% } %>

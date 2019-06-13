@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const passport = require('passport');
+const {checkLoggedIn, justLogged} = require('./tokenVerification');
 
 dotenv.config();
 
@@ -15,21 +16,6 @@ var databaseObject = mysql.createPool({
     password: 'chucknorris',
     database: 'wehhcj_chuckNor'
 });
-
-var listOfJokes;
-requestSentences();
-
-//Get the jokes from the API
-async function requestSentences(){
-    var request = require('request');
-    request('http://api.icndb.com/jokes/random/10', function(error, response, body){
-        if(!error && response.statusCode == 200){
-            var info = JSON.parse(body);
-            
-            listOfJokes = info.value;
-        }
-    });
-}
 
 /**
  * Registration Management
@@ -144,6 +130,26 @@ router.get('/logout', (req, res) => {
     req.logOut();
     req.flash('success_msg', 'You have been logged out');
     res.redirect('/user/login');
+});
+
+router.post('/addFavorite', checkLoggedIn, (req, res) => {
+
+    var sqlQuery2 = "INSERT INTO Favorites (idUser, idJoke, favoriteJoke) VALUES ('" 
+                    + req.user.idUser + "', '" 
+                    + req.body.idJoke + "', '" 
+                    + req.body.joke + "')";
+
+    //Make the SQL request to the server
+    databaseObject.query(sqlQuery2, function (error, result) {
+        if(error){
+            console.log('An error occured when trying to add a favorite to the database');
+            res.status(500).redirect('/user/jokes',{message: 'An error occured when trying to add a favorite to the database'});
+        }else{
+            console.log('The joke ' + req.user.idJoke + ' has been insert in the database');
+            //req.flash('success_msg', 'You are now registered');
+            res.status(200).redirect('/user/jokes');//If everything was ok, go back to login page
+        }
+    });
 });
 
 module.exports = router;
