@@ -17,7 +17,6 @@ var databaseObject = mysql.createPool({
     database: 'wehhcj_chuckNor'
 });
 
-
 /**
  * Registration Management
  */
@@ -142,16 +141,18 @@ router.post('/register', (req, res) => {
             const hashedUserPassword = await bcrypt.hash(req.body.password, salt);
 
             var sqlQuery2 = "INSERT INTO User (userName, userPassword) VALUES ('" 
-                    + req.body.userName + "', '" 
+                    + req.body.username + "', '" 
                     + hashedUserPassword + "')";
 
             //Make the SQL request to the server
             databaseObject.query(sqlQuery2, function (error, result, fields) {
                 if(error){
                     console.log('An error occured when trying to add a user to the database');
-                    res.status(500).render('registerPage',{message: 'An error occured when trying to add a user to the database'});
+                    //res.status(500).render('registerPage',{message: 'An error occured when trying to add a user to the database'});
+                    req.flash('error', 'An error occured when trying to add a user to the database');
+                    res.status(400).redirect('/user/login');
                 }else{
-                    console.log('The user ' + req.body.userName + ' has been insert in the database');
+                    console.log('The user ' + req.body.username + ' has been insert in the database');
                     req.flash('success_msg', 'You are now registered');
                     res.status(200).redirect('/user/login');//If everything was ok, go back to login page
                 }
