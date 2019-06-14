@@ -35,37 +35,117 @@ router.get('/login', (req, res) => {
 router.post('/register', (req, res) => {
 
     //Check for already existing userName
-    var sqlQuery = "SELECT * FROM User WHERE userName = ?";
+    var sqlQuery = "SELECT * FROM User WHERE username = '" + req.body.username + "'";
 
     //Send the request to the database
-    databaseObject.query(sqlQuery, [req.body.userName], async function(error, result){
+    databaseObject.query(sqlQuery, async function(error, result, fields){
         if(error){
             console.log('An error occured when trying to add a user to the database');
-            res.status(500).render('registerPage',{message: 'An error occured when trying to add a user to the database'});
-            return;
+            req.flash('error', 'An error occured when trying to access the database');
+            return res.redirect(500, 'registerPage');
         }
 
         //If there are no already existing username
         if(result.length == 0){
 
             //Password should be at least 6 caracters long and shorter than 32
-            if(req.body.userPassword.length > 32){
-                return res.status(400).render('registerPage', {message: 'The password cannot be longer than 32 caracters', userName: req.body.userName});
+            if(req.body.password.length > 32){
+                req.flash('error', 'The password cannot be longer than 32 caracters');
+                return res.status(400).redirect('/user/register');
             }
-            if(req.body.userPassword.length < 6){
-                return res.status(400).render('registerPage', {message: 'The password should be at least 6 caracters long', userName: req.body.userName});
+            if(req.body.password.length < 6){
+                req.flash('error', 'The password should be at least 6 caracters long');
+                return res.status(400).redirect('/user/register');
             }
+            
+            var verif = false;
+            var nbTimeFound = 0;
+
+            var passWordStringCheck = req.body.password;
+
+            //Go through all of the letters of the alphabet in lower and upper case
+            //By incrementing numbers and then transforming them in letter via ASCII table
+            //If it finds followings of i, i+1 and i+2, returns true
+            for(var i = 65; i < 121; i++){
+                var temp = String.fromCharCode(i, i+1, i+2);
+        
+                //If there is a match
+                if(passWordStringCheck.search(temp)!=-1){
+                    verif = true;
+                }
+                if(i==88) i = 96
+            }
+
+            //Display error and redirect
+            if(!verif){
+                req.flash('error', 'Passwords must include one increasing straight of at least three letters, like ‘abc’, ‘cde’, ‘fgh’, and so on, up to ‘xyz’.');
+                return res.status(400).redirect('/user/register');
+            }
+
+            var regex = /[iOl]/;
+            //Check is there are any of the i, O or l letters
+            if(regex.test(passWordStringCheck)){
+                req.flash('error', 'asswords may not contain the letters i, O, or l, as these letters can be mistaken for other characters and are therefore confusing.');
+                return res.status(400).redirect('/user/register');
+            }
+
+            verif = false;
+
+            //Go through all of the letters of the alphabet in lower and upper case
+            //By incrementing numbers and then transforming them in letter via ASCII table
+            //If it finds two pairs of the same letter return true
+            for(var i = 65; i < 123; i++){
+                var temp = String.fromCharCode(i, i);
+        
+                //If there is a match
+                if(passWordStringCheck.search(temp)!=-1){
+                    passWordStringCheck = passWordStringCheck.replace(temp, '');
+                    nbTimeFound++;
+                    verif = true;
+                }
+                if(i==90) i = 96
+            }
+
+            //Verif if there was a match
+            if(verif){
+                verif = false;
+
+                //Do again the search
+                for(var i = 65; i < 123; i++){
+                    var temp = String.fromCharCode(i, i);
+            
+                    //If there is a match
+                    if(passWordStringCheck.search(temp)!=-1){
+                        verif = true;
+                        nbTimeFound
+                    }
+                    if(i==90) i = 96
+                }
+
+                //If at least two of them have been found, validate the password
+                if(nbTimeFound >= 2){
+                    console.log('The password has been accepted !');
+                }else{
+                    req.flash('error', 'The password should have at least two non-overlapping pairs of letters, like aa, bb, or cc.');
+                    return res.status(400).redirect('/user/register');
+                }
+
+            }else{
+                req.flash('error', 'The password should have at least two non-overlapping pairs of letters, like aa, bb, or cc.');
+                return res.status(400).redirect('/user/register');
+            }
+                    
 
             //Encrypting the password thanks to bcrypt
             const salt = await bcrypt.genSalt(10);
-            const hashedUserPassword = await bcrypt.hash(req.body.userPassword, salt);
+            const hashedUserPassword = await bcrypt.hash(req.body.password, salt);
 
             var sqlQuery2 = "INSERT INTO User (userName, userPassword) VALUES ('" 
                     + req.body.userName + "', '" 
                     + hashedUserPassword + "')";
 
             //Make the SQL request to the server
-            databaseObject.query(sqlQuery2, function (error, result) {
+            databaseObject.query(sqlQuery2, function (error, result, fields) {
                 if(error){
                     console.log('An error occured when trying to add a user to the database');
                     res.status(500).render('registerPage',{message: 'An error occured when trying to add a user to the database'});
@@ -83,38 +163,6 @@ router.post('/register', (req, res) => {
 
 });
 
-//Log In post management
-/*router.post('/login', (req, res) => {
-
-    var sqlQuery = "SELECT * FROM User WHERE userName = ?";
-    databaseObject.query(sqlQuery, [req.body.userName], async function(error, result, fields){
-        if(error){
-            res.status(500).render('loginPage',{message: 'An issue happened when trying to connect to the database'});
-        }
-
-        //If a match has been found
-        if(result.length == 1){
-            const correctPassword = await bcrypt.compare(req.body.userPassword, result[0].userPassword);
-
-            //If the password isn't correct
-            if(!correctPassword) res.status(400).render('loginPage',{message: 'The password isn\'t correct', userName: req.body.userName});
-
-            //Create and given a jwt
-            const token = jwt.sign({idUser: result.idUser}, process.env.PRIVATE_TOKEN);
-
-            //res.render('index', {userName: 'testPerson', jokes: listOfJokes});
-            //res.end();
-            res.header('token', token);
-            
-            res.redirect(200, '/');
-            //res.header('authentificationToken', token).status(200).redirect('/api/listOfJokes');
-        }else{
-            res.status(404).render('loginPage', {message: 'Couldn\'t find the requested User Name'});
-        }
-    });
-
-});*/
-
 //Redirection management for the login page
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
@@ -131,6 +179,7 @@ router.get('/logout', (req, res) => {
     res.redirect('/user/login');
 });
 
+//Manages the adding of favorites in the database
 router.post('/addFavorite', checkLoggedIn, (req, res) => {
 
     var sqlQuery = "SELECT * FROM Favorites WHERE idUser = " + req.user.idUser;
@@ -144,6 +193,7 @@ router.post('/addFavorite', checkLoggedIn, (req, res) => {
 
         var nbOfJokes = result.length;
 
+        //If there are already 10 favorites, cancel it
         if(result.length >= 10){
             console.log('You cannot have more than 10 favorites');
             return res.json({message: 'You cannot have more than 10 favorites',
@@ -178,6 +228,7 @@ router.post('/addFavorite', checkLoggedIn, (req, res) => {
 
 });
 
+//Manages the suppression of favorites in the dabatase
 router.post('/removeFavorite', checkLoggedIn, (req, res) => {
 
     var sqlQuery = "SELECT * FROM Favorites WHERE idUser = " + req.user.idUser;
@@ -215,6 +266,7 @@ router.post('/removeFavorite', checkLoggedIn, (req, res) => {
     });
 });
 
+//Manages the random adding of jokes in the database
 router.get('/addRandomJoke', checkLoggedIn, (req, res) => {
     var sqlQuery = "SELECT * FROM Favorites WHERE idUser = " + req.user.idUser;
 
@@ -227,6 +279,7 @@ router.get('/addRandomJoke', checkLoggedIn, (req, res) => {
 
         var nbOfJokes = result.length;
 
+        //If there are already 10 favorites, cancel it
         if(result.length >= 10){
             console.log('You cannot have more than 10 favorites');
             return res.json({message: 'You cannot have more than 10 favorites',

@@ -1,5 +1,6 @@
-var globalIntervalId = 0;
+var globalIntervalId = 0; //To keep track of the automatic add of jokes
 
+//Set the events on the buttons
 $(document).ready(function(){
     $('.nonFavoriteButton').on('click', addFavorite);
 
@@ -33,6 +34,7 @@ function addFavorite(){
             //Display information about the action
             $('.favoriteButton').on('click', removeFavorite);
 
+            //Tell the user that the joke has been added to the favorites
             if(response.success){
                 var $row = $('<div class="container-fluid">' +
                         '<div class="row justify-content-center">' +
@@ -45,6 +47,9 @@ function addFavorite(){
                 //Add the new joke to the favorites
                 $(".nameTitle").after($row);
             }
+            
+        }else{
+            //Display an alert when something went wrong
             if(response.alert){
                 var $row = $('<div class="container-fluid">' +
                         '<div class="row justify-content-center">' +
@@ -57,8 +62,6 @@ function addFavorite(){
                 //Add the new joke to the favorites
                 $(".nameTitle").after($row);
             }
-        }else{
-            
         }
 
     });
@@ -84,6 +87,7 @@ function removeFavorite(){
 
         }
 
+        //Add to the DOM an alert to tell the user that everything went well
         if(response.success){
             var $row = $('<div class="container-fluid">' +
                     '<div class="row justify-content-center">' +
@@ -96,6 +100,7 @@ function removeFavorite(){
             //Add the new joke to the favorites
             $(".nameTitle").after($row);
         }
+        //Display an alert when something went wrong
         if(response.alert){
             var $row = $('<div class="container-fluid">' +
                     '<div class="row justify-content-center">' +
@@ -144,10 +149,9 @@ function addRandomJoke(){
                     //Add the joke to the favorites in the DOM
                     $(".favoriteContainer").append($row);
 
-                }else{
-                    
                 }
 
+                //When the joke has been added to favorite, add it to the DOM
                 if(response.success){
                 
                     var $row = $('<div class="container-fluid">' +
@@ -162,6 +166,7 @@ function addRandomJoke(){
                     $(".nameTitle").after($row);
                     
                 }
+                //Display an alert when something went wrong
                 if(response.alert){
                     var $row = $('<div class="container-fluid">' +
                             '<div class="row justify-content-center">' +
@@ -175,6 +180,7 @@ function addRandomJoke(){
                     $(".nameTitle").after($row);
                 }
         
+                //Stop the setInterval of adding random jokes in favorites when the limit of 10 has been reached
                 if((response.nbOfFavorites+1) >= 10){
                     $('.randomButton').removeClass('btn-success').addClass('btn-danger');
                     $('.randomButton').text('Off');
@@ -184,6 +190,7 @@ function addRandomJoke(){
             });
         }, 5000);
     }else{
+        //Stop the setInterval of adding random jokes in favorites when the users ask for it
         $('.randomButton').removeClass('btn-success').addClass('btn-danger');
         $('.randomButton').text('Off');
         clearInterval(globalIntervalId);
