@@ -17,6 +17,7 @@ var databaseObject = mysql.createPool({
     database: 'wehhcj_chuckNor'
 });
 
+
 /**
  * Registration Management
  */
