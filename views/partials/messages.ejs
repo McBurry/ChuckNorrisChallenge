@@ -12,30 +12,33 @@
 
 <% if(typeof favoriteJokes != 'undefined'){ %>
 
+        <h2 class="nbOfFavorites" style="text-align: center"><%=favoriteJokes.length%> / 10 favorite jokes</h2>
+
+        <div style="text-align:center">Add random joke every 5 seconds : <button type="button" class="randomButton btn btn-danger" data-toggle="button" aria-pressed="false" autocomplete="off">Off</button></div>
+
         <div class="list-group">
-        <% for(var i = 0; i < favoriteJokes.length; i++){ %>
-                <div class="container-fluid">
-                        <div class="row favorite">
-                                <div class="col-10"><a href="#" class="joke list-group-item list-group-item-secondary"><%=favoriteJokes[i].favoriteJoke%></a></div>
-                                <div class="col-2"><button data-id="<%=favoriteJokes[i].id%>" type="button" class="btn btn-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>
-                        </div>
+                <div class="container-fluid favoriteContainer">
+                        <% for(var i = 0; i < favoriteJokes.length; i++){ %>
+                                <div class="row favorite">
+                                        <div class="col-10"><a href="#" class="joke list-group-item list-group-item-secondary"><%=favoriteJokes[i].favoriteJoke%></a></div>
+                                        <div class="col-2"><button data-id="<%=favoriteJokes[i].idJoke%>" type="button" class="favoriteButton btn btn-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>
+                                </div>
+                        <% } %>
                 </div>
-                
-        <% } %>
         </div>
 <% } %>
 
 <% if(typeof jokes != 'undefined'){ %>
 
         <div class="list-group">
-        <% for(var i = 0; i < jokes.length; i++){ %>
-                <div class="container-fluid">
-                        <div class="row favorite">
-                                <div class="col-10"><a href="#" class="joke list-group-item list-group-item-action"><%=jokes[i].joke%></a></div>
-                                <div class="col-2"><button data-id="<%=jokes[i].id%>" type="button" class="btn btn-outline-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>
-                        </div>
+                <div class="container-fluid nonFavoriteContainer">
+                        <% for(var i = 0; i < jokes.length; i++){ %>
+                                <div class="row non-favorite">
+                                        <div class="col-10"><a href="#" class="joke list-group-item list-group-item-action"><%=jokes[i].joke%></a></div>
+                                        <div class="col-2"><button data-id="<%=jokes[i].id%>" type="button" class="nonFavoriteButton btn btn-outline-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>
+                                </div>
+                                
+                        <% } %>
                 </div>
-                
-        <% } %>
         </div>
 <% } %>

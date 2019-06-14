@@ -32,7 +32,8 @@ async function requestSentences(){
 router.get('/jokes', checkLoggedIn, (req, res) => {
     //const token = res.header('authentificationToken');
 
-    //const token = req.headers['authentificationToken']; 
+    //const token = req.headers['authentificationToken'];
+    requestSentences(); 
 
     var sqlQuery2 = "SELECT * FROM Favorites WHERE idUser = " + req.user.idUser;
 
@@ -42,14 +43,12 @@ router.get('/jokes', checkLoggedIn, (req, res) => {
             console.log('An error occured when trying to get the favorites from the database');
             res.status(500).render('loginPage',{message: 'An error occured when trying to get the favorites from the database'});
         }
-        //req.flash('success_msg', 'You are now registered');
-        //res.status(200).redirect('/jokes');//If everything was ok, go back to login page
-
-        res.render('index', {userName: req.user.userName, favoriteJokes: result, jokes: jokes});
+        
+        //Renders the main page
+        res.render('index', {userName: req.user.userName,
+                            favoriteJokes: result,
+                            jokes: jokes,});
     });
-
-    //Display the main frame of the application
-    //console.log(jokes);
     
 });
 

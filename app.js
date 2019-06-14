@@ -51,41 +51,4 @@ application.use('/user', require('./routes/authentification.js'));
 //To use JSON format
 application.use(express.json());
 
-//Instanciate the connection object
-var databaseObject = mysql.createPool({
-    host: '89.234.180.47',
-    user: 'wehhcj_chuckNor',
-    password: 'chucknorris',
-    database: 'wehhcj_chuckNor'
-});
-
-//To manage the list of jokes
-var listOfJokes;
-requestSentences();
-
-//Get the information about the user
-application.get('/api/getUserInfo', (req, res) => {
-
-    var sqlQuery = "SELECT * FROM User";
-    databaseObject.query(sqlQuery, function(error, result, field){
-        if(error){
-            console.log(error);
-        }
-
-        res.send(result[0]);
-    });
-
-});
-
-async function requestSentences(){
-    var request = require('request');
-    request('http://api.icndb.com/jokes/random/10', function(error, response, body){
-        if(!error && response.statusCode == 200){
-            var info = JSON.parse(body);
-            
-            listOfJokes = info.value;
-        }
-    });
-}
-
 application.listen(3000, () => console.log('Serveur ready and listening'));

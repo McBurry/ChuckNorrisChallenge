@@ -1,20 +1,29 @@
 
 <h1 style="text-align:center">Chuck Norris Project</h1>
-<h1 style="text-align:center">LogIn</h1>
+<h1 style="text-align:center;font-size:100">LogIn</h1>
 <br>
 <% include ./partials/messages %>
-<form style="text-align:center" action="/user/login" method="post">
-    <div class="form-group">
-            <label for="userName">User Name</label>
-            <input type="text" class="form-control" name="username" placeholder="Enter User Name" value="<%= typeof userName != 'undefined' ? userName : ''%>">
+
+<div class="container-fluid">
+    <form action="/user/login" method="post">
+        <div class="form-group row justify-content-md-center">
+            <div class="col-2"><label for="userName">User Name : </label></div>
+            <div class="col-5"><input type="text" class="form-control" name="username" placeholder="Enter User Name" value="<%= typeof userName != 'undefined' ? userName : ''%>"></div>
         </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" name="password" placeholder="Password">
+        <div class="form-group row justify-content-md-center">
+            <div class="col-2"><label for="exampleInputPassword1">Password : </label></div>
+            <div class="col-5"><input type="password" class="form-control" name="password" placeholder="Password"></div>
         </div>
-        <button type="submit" class="btn btn-primary">LogIn</button>        
-</form>
+        <div class="row justify-content-md-center">
+            <button type="submit" class="btn btn-success">Submit</button>        
+        </div>   
+    </form>
+</div>
 
 <br>
-<a style="text-align:center" href="/user/register"><p>Register</p></a>
-<a style="text-align:center" href="/user/login"><p>Log In</p></a>
+
+<div style="text-align:center">
+    
+    <p><a href="/user/register">Register</a>   |   <a href="/user/login">Log In</a></p>
+    
+</div>
