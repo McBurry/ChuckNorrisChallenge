@@ -1,28 +1,27 @@
 
 <h1 style="text-align:center">Chuck Norris Project</h1>
 <h1 style="text-align:center;font-size:100">LogIn</h1>
-<br>
+
 <% include ./partials/messages %>
 
-<div class="container-fluid">
+<div class="container-fluid logForm">
     <form action="/user/login" method="post">
-        <div class="form-group row justify-content-md-center">
-            <div class="col-2"><label for="userName">User Name : </label></div>
-            <div class="col-5"><input type="text" class="form-control" name="username" placeholder="Enter User Name" value="<%= typeof userName != 'undefined' ? userName : ''%>"></div>
+        <div class="form-group row justify-content-center">
+            <div class="col-xs-3 col-md-2"><label for="userName">User Name : </label></div>
+            <div class="col-xs-9 col-md-5"><input type="text" class="form-control" name="username" placeholder="Enter User Name" value="<%= typeof userName != 'undefined' ? userName : ''%>"></div>
         </div>
-        <div class="form-group row justify-content-md-center">
-            <div class="col-2"><label for="exampleInputPassword1">Password : </label></div>
-            <div class="col-5"><input type="password" class="form-control" name="password" placeholder="Password"></div>
+        <div class="form-group row justify-content-center">
+            <div class="col-xs-3 col-md-2"><label for="exampleInputPassword1">Password : </label></div>
+            <div class="col-xs-9 col-md-5"><input type="password" class="form-control" name="password" placeholder="Password"></div>
         </div>
-        <div class="row justify-content-md-center">
+        <div class="row justify-content-center">
             <button type="submit" class="btn btn-success">Submit</button>        
         </div>   
     </form>
 </div>
 
-<br>
 
-<div style="text-align:center">
+<div style="text-align:center" class="redirectLinks">
     
     <p><a href="/user/register">Register</a>   |   <a href="/user/login">Log In</a></p>
     

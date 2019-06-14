@@ -146,7 +146,9 @@ router.post('/addFavorite', checkLoggedIn, (req, res) => {
 
         if(result.length >= 10){
             console.log('You cannot have more than 10 favorites');
-            res.redirect('/jokes');
+            return res.json({message: 'You cannot have more than 10 favorites',
+                                alert: 'You cannot have more than 10 favorites',
+                                nbOfFavorites: nbOfJokes});
         }else{
             var sqlQuery2 = "INSERT INTO Favorites (idUser, idJoke, favoriteJoke) VALUES ('" 
                     + req.user.idUser + "', '" 
@@ -162,8 +164,10 @@ router.post('/addFavorite', checkLoggedIn, (req, res) => {
                     console.log('The joke ' + req.user.idJoke + ' has been insert in the database');
                     
                     //Send back the result to the AJAX request
+                    req.flash('success_msg', 'Joke added');
                     return res.json({message: 'worked',
                                 nbOfFavorites: nbOfJokes,
+                                success: 'The joke have been added to favorites',
                                 joke: req.body.joke,
                                 idJoke: req.body.idJoke});
                 }
@@ -202,6 +206,7 @@ router.post('/removeFavorite', checkLoggedIn, (req, res) => {
                     //Send back the result to the AJAX request
                     return res.json({message: 'worked',
                                 nbOfFavorites: nbOfJokes,
+                                success: 'The joke have been deleted from the favorites',
                                 idJoke: req.body.idJoke});
                 }
             });
@@ -225,6 +230,7 @@ router.get('/addRandomJoke', checkLoggedIn, (req, res) => {
         if(result.length >= 10){
             console.log('You cannot have more than 10 favorites');
             return res.json({message: 'You cannot have more than 10 favorites',
+                                alert: 'You cannot have more than 10 favorites',
                                 nbOfFavorites: nbOfJokes});
         }else{
             var randomJoke = await requestRandomSentence();
@@ -245,6 +251,7 @@ router.get('/addRandomJoke', checkLoggedIn, (req, res) => {
                     //Send back the result to the AJAX request
                     return res.json({message: 'worked',
                                 nbOfFavorites: nbOfJokes,
+                                success: 'The joke have been added to favorites',
                                 joke: randomJoke[0].joke,
                                 idJoke: randomJoke[0].id});
                 }

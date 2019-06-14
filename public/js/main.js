@@ -22,15 +22,41 @@ function addFavorite(){
         if(response.message == "worked"){
             $('.nbOfFavorites').html((response.nbOfFavorites + 1) + ' / 10 favorite jokes');
 
-            var $row = $('<div class="row favorite">'+
-                            '<div class="col-10"><a href="#" class="joke list-group-item list-group-item-secondary">' + response.joke + '</a></div>' +
-                            '<div class="col-2"><button data-id="' + response.idJoke + '" type="button" class="favoriteButton btn btn-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>' +
+            var $row = $('<div class="row justify-content-center align-items-center favorite">'+
+                            '<div class="col col-md-8"><a href="#" class="joke list-group-item list-group-item-warning">' + response.joke + '</a></div>' +
+                            '<div class="col-auto col-md-1"><button data-id="' + response.idJoke + '" type="button" class="favoriteButton btn btn-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>' +
                         '</div>');
 
             //Add the new joke to the favorites
             $(".favoriteContainer").append($row);
 
+            //Display information about the action
             $('.favoriteButton').on('click', removeFavorite);
+
+            if(response.success){
+                var $row = $('<div class="container-fluid">' +
+                        '<div class="row justify-content-center">' +
+                        '<div class="col-auto col-md-8"><div class="infoZone alert alert-dismissible alert-success fade show" role="alert">' + 
+                        response.success +
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>' +
+                        '</div>' +
+                        '</div>');
+
+                //Add the new joke to the favorites
+                $(".nameTitle").after($row);
+            }
+            if(response.alert){
+                var $row = $('<div class="container-fluid">' +
+                        '<div class="row justify-content-center">' +
+                        '<div class="col-auto col-md-8"><div class="infoZone alert alert-dismissible alert-danger fade show" role="alert">' + 
+                        response.alert +
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>' +
+                        '</div>' +
+                        '</div>');
+
+                //Add the new joke to the favorites
+                $(".nameTitle").after($row);
+            }
         }else{
             
         }
@@ -56,6 +82,31 @@ function removeFavorite(){
             $('[data-id="'+response.idJoke+'"]').closest(".favorite").remove();
         }else{
 
+        }
+
+        if(response.success){
+            var $row = $('<div class="container-fluid">' +
+                    '<div class="row justify-content-center">' +
+                    '<div class="col-auto col-md-8"><div class="infoZone alert alert-dismissible alert-success fade show" role="alert">' + 
+                    response.success +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>' +
+                    '</div>' +
+                    '</div>');
+
+            //Add the new joke to the favorites
+            $(".nameTitle").after($row);
+        }
+        if(response.alert){
+            var $row = $('<div class="container-fluid">' +
+                    '<div class="row justify-content-center">' +
+                    '<div class="col-auto col-md-8"><div class="infoZone alert alert-dismissible alert-danger fade show" role="alert">' + 
+                    response.alert +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>' +
+                    '</div>' +
+                    '</div>');
+
+            //Add the new joke to the favorites
+            $(".nameTitle").after($row);
         }
 
     });
@@ -85,9 +136,9 @@ function addRandomJoke(){
                 if(response.message == "worked"){
                     $('.nbOfFavorites').html((response.nbOfFavorites + 1) + ' / 10 favorite jokes');
         
-                    var $row = $('<div class="row favorite">'+
-                                    '<div class="col-10"><a href="#" class="joke list-group-item list-group-item-secondary">' + response.joke + '</a></div>' +
-                                    '<div class="col-2"><button data-id="' + response.idJoke + '" type="button" class="favoriteButton btn btn-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>' +
+                    var $row = $('<div class="row justify-content-center align-items-center favorite">'+
+                                    '<div class="col col-md-8"><a href="#" class="joke list-group-item list-group-item-warning">' + response.joke + '</a></div>' +
+                                    '<div class="col-auto col-md-1"><button data-id="' + response.idJoke + '" type="button" class="favoriteButton btn btn-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>' +
                                 '</div>');
         
                     //Add the joke to the favorites in the DOM
@@ -95,6 +146,33 @@ function addRandomJoke(){
 
                 }else{
                     
+                }
+
+                if(response.success){
+                
+                    var $row = $('<div class="container-fluid">' +
+                            '<div class="row justify-content-center">' +
+                            '<div class="col-auto col-md-8"><div class="infoZone alert alert-dismissible alert-success fade show" role="alert">' + 
+                            response.success +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>' +
+                            '</div>' +
+                            '</div>');
+
+                    //Add the new joke to the favorites
+                    $(".nameTitle").after($row);
+                    
+                }
+                if(response.alert){
+                    var $row = $('<div class="container-fluid">' +
+                            '<div class="row justify-content-center">' +
+                            '<div class="col-auto col-md-8"><div class="infoZone alert alert-dismissible alert-danger fade show" role="alert">' + 
+                            response.alert +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>' +
+                            '</div>' +
+                            '</div>');
+    
+                    //Add the new joke to the favorites
+                    $(".nameTitle").after($row);
                 }
         
                 if((response.nbOfFavorites+1) >= 10){

@@ -3,25 +3,40 @@
 <% } %>
 
 <% if(success_msg != ''){ %>
-        <%= success_msg%>
+        <div style="margin-top:5%" class="container-fluid">
+                <div class="row justify-content-center">
+                        <div class="col-auto col-md-8"><div class="alert alert-success fade show" role="alert"><%= success_msg%>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                        </button></div></div>
+                </div>
+        </div>
+
 <% } %>
 
 <% if(error != ''){ %>
-        <%= error%>
+        <div style="margin-top:5%" class="container-fluid">
+                <div class="row justify-content-center">
+                        <div class="col-auto col-md-8"><div class="alert alert-danger fade show" role="alert"><%= error%>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                        </button></div></div>
+                </div>
+        </div>
 <% } %>
 
 <% if(typeof favoriteJokes != 'undefined'){ %>
 
         <h2 class="nbOfFavorites" style="text-align: center"><%=favoriteJokes.length%> / 10 favorite jokes</h2>
 
-        <div style="text-align:center">Add random joke every 5 seconds : <button type="button" class="randomButton btn btn-danger" data-toggle="button" aria-pressed="false" autocomplete="off">Off</button></div>
+        <div class="autoAdd" style="text-align:center">Add random joke every 5 seconds : <button type="button" class="randomButton btn btn-danger" data-toggle="button" aria-pressed="false" autocomplete="off">Off</button></div>
 
         <div class="list-group">
                 <div class="container-fluid favoriteContainer">
                         <% for(var i = 0; i < favoriteJokes.length; i++){ %>
-                                <div class="row favorite">
-                                        <div class="col-10"><a href="#" class="joke list-group-item list-group-item-secondary"><%=favoriteJokes[i].favoriteJoke%></a></div>
-                                        <div class="col-2"><button data-id="<%=favoriteJokes[i].idJoke%>" type="button" class="favoriteButton btn btn-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>
+                                <div class="row justify-content-center align-items-center favorite">
+                                        <div class="col col-md-8"><a href="#" class="joke list-group-item list-group-item-warning"><%=favoriteJokes[i].favoriteJoke%></a></div>
+                                        <div class="col-auto col-md-1"><button data-id="<%=favoriteJokes[i].idJoke%>" type="button" class="favoriteButton btn btn btn-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>
                                 </div>
                         <% } %>
                 </div>
@@ -33,9 +48,9 @@
         <div class="list-group">
                 <div class="container-fluid nonFavoriteContainer">
                         <% for(var i = 0; i < jokes.length; i++){ %>
-                                <div class="row non-favorite">
-                                        <div class="col-10"><a href="#" class="joke list-group-item list-group-item-action"><%=jokes[i].joke%></a></div>
-                                        <div class="col-2"><button data-id="<%=jokes[i].id%>" type="button" class="nonFavoriteButton btn btn-outline-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>
+                                <div class="row justify-content-center align-items-center non-favorite">
+                                        <div class="col col-md-8"><a href="#" class="joke list-group-item list-group-item-light"><%=jokes[i].joke%></a></div>
+                                        <div class="col-auto col-md-1"><button data-id="<%=jokes[i].id%>" type="button" class="nonFavoriteButton btn btn-outline-success" data-toggle="button" aria-pressed="false" autocomplete="off">Favorite</button></div>
                                 </div>
                                 
                         <% } %>
