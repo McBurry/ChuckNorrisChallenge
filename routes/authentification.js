@@ -190,7 +190,9 @@ router.post('/addFavorite', checkLoggedIn, (req, res) => {
     databaseObject.query(sqlQuery, function (error, result) {
         if(error){
             console.log('An error occured when trying to get the favorites from the database');
-            res.render('loginPage',{message: 'An error occured when trying to get the favorites from the database'});
+            return res.json({message: 'An error occured when trying to get the favorite from the database',
+                                alert: 'An error occured when trying to get the favorite from the database',
+                            });
         }
 
         var nbOfJokes = result.length;
@@ -211,7 +213,9 @@ router.post('/addFavorite', checkLoggedIn, (req, res) => {
             databaseObject.query(sqlQuery2, function (error, result2) {
                 if(error){
                     console.log('An error occured when trying to add a favorite to the database');
-                    return res.redirect(500, '/jokes',{message: 'An error occured when trying to add a favorite to the database'});
+                    return res.json({message: 'An error occured when trying to add a favorite to the database',
+                                alert: 'An error occured when trying to add a favorite to the database',
+                                nbOfFavorites: nbOfJokes});
                 }else{
                     console.log('The joke ' + req.user.idJoke + ' has been insert in the database');
                     
@@ -239,7 +243,9 @@ router.post('/removeFavorite', checkLoggedIn, (req, res) => {
     databaseObject.query(sqlQuery, function (error, result) {
         if(error){
             console.log('An error occured when trying to get the favorites from the database');
-            return res.render('loginPage',{message: 'An error occured when trying to get the favorites from the database'});
+            return res.json({message: 'An error occured when trying to get the favorites from the database',
+                                alert: 'An error occured when trying to get the favorites from the database'
+                            });
         }
 
         var nbOfJokes = result.length;
@@ -252,7 +258,9 @@ router.post('/removeFavorite', checkLoggedIn, (req, res) => {
             databaseObject.query(sqlQuery2, function (error, result) {
                 if(error){
                     console.log('An error occured when trying to remove the favorite from the database');
-                    return res.redirect(400, '/jokes',{message: 'An error occured when trying to delete the favorite from the database'});
+                    return res.json({message: 'An error occured when trying to remove the favorite from the database',
+                                alert: 'An error occured when trying to remove the favorite from the database',
+                                nbOfFavorites: nbOfJokes});
                 }else{
                     console.log('The joke ' + req.body.idJoke + ' has been removed from the database');
                     
@@ -276,8 +284,10 @@ router.get('/addRandomJoke', checkLoggedIn, (req, res) => {
      databaseObject.query(sqlQuery, async function (error, result) {
         if(error){
             console.log('An error occured when trying to get the favorites from the database');
-            return res.status(500).render('loginPage',{message: 'An error occured when trying to get the favorites from the database'});
-        }
+            return res.json({message: 'An error occured when trying to get the favorites from the database',
+                                alert: 'An error occured when trying to get the favorites from the database',
+                                nbOfFavorites: nbOfJokes});
+            }
 
         var nbOfJokes = result.length;
 

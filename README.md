@@ -1,6 +1,6 @@
 # ChuckNorrisChallenge
 
-## Main goals and requierement of the project
+## Main goals and requirement of the project
 
 Create a JavaScript based Client Application, web or mobile, that utilizes the purpose of the Gateway. If you would like to use a Framework like Vue or React, or WechatMiniApp (prefer) to create your Client Application, feel free to use them but if you do, start a project from scratch and don’t use a 3rd party boilerplate/ starter kit.
 
